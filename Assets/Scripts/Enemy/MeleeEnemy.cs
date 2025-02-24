@@ -1,66 +1,71 @@
-using System;
 using UnityEngine;
 
 public class MeleeEnemy : MonoBehaviour
 {
-   [SerializeField]private float attackCooldown;
+    [Header ("Attack Parameters")]
+    [SerializeField] private float attackCooldown;
+    [SerializeField] private float range;
+    [SerializeField] private int damage;
 
-   [SerializeField]private float damage;
-
-    [SerializeField]private float attackRange;
+    [Header("Collider Parameters")]
     [SerializeField] private float colliderDistance;
+    [SerializeField] private BoxCollider2D boxCollider;
 
-    [SerializeField] private BoxCollider2D boxCollider2D;
-
+    [Header("Player Layer")]
     [SerializeField] private LayerMask playerLayer;
+    private float cooldownTimer = Mathf.Infinity;
 
+    //References
+    private Animator anim;
     private HealthController playerHealth;
-   private float cooldowntimer=Mathf.Infinity;
+    private EnemyPatroll enemyPatrol;
 
-   private Animator animator;
-
-    private void Start()
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
+        enemyPatrol = GetComponentInParent<EnemyPatroll>();
     }
+
     private void Update()
     {
-        cooldowntimer += Time.deltaTime;
+        cooldownTimer += Time.deltaTime;
+
+        //Attack only when player in sight?
         if (PlayerInSight())
         {
-            if (cooldowntimer >= attackCooldown){
-                cooldowntimer = 0;
-                animator.SetTrigger("Attack");
+            if (cooldownTimer >= attackCooldown)
+            {
+                cooldownTimer = 0;
+                anim.SetTrigger("Attack");
             }
         }
 
+        if (enemyPatrol != null)
+            enemyPatrol.enabled = !PlayerInSight();
     }
 
-    private bool PlayerInSight(){
-        RaycastHit2D hit = Physics2D.BoxCast(boxCollider2D.bounds.center + transform.right*attackRange*transform.localScale.x*colliderDistance,
-        new Vector3(boxCollider2D.bounds.size.x*attackRange,boxCollider2D.bounds.size.y,boxCollider2D.bounds.size.z), 0f, Vector2.left, 0f,
-            playerLayer);
-        
+    private bool PlayerInSight()
+    {
+        RaycastHit2D hit = 
+            Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
+            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
+            0, Vector2.left, 0, playerLayer);
+
         if (hit.collider != null)
-        {
-            playerHealth = hit.collider.GetComponent<HealthController>();
-        }
+            playerHealth = hit.transform.GetComponent<HealthController>();
 
         return hit.collider != null;
     }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center+ transform.right*attackRange*transform.localScale.x*colliderDistance,  new Vector3(boxCollider2D.bounds.size.x*attackRange,boxCollider2D.bounds.size.y,boxCollider2D.bounds.size.z));      
+        Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
+            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
     }
 
-    private void DamagePlayer(){
-        //Debug.Log("DamagePlayer");
-        if (PlayerInSight()){
+    private void DamagePlayer()
+    {
+        if (PlayerInSight())
             playerHealth.TakeDamage(damage);
-        }
-    }
-    private void Deactivate(){
-        gameObject.SetActive(false);
     }
 }

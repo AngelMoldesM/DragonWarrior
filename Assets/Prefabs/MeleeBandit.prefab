@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4037600117480806931}
   - component: {fileID: 2376862785969250343}
   - component: {fileID: -9063263647306941038}
-  - component: {fileID: -8337749920092429706}
   m_Layer: 0
   m_Name: MeleeBandit
   m_TagString: Enemy
@@ -174,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 3
+  components: []
 --- !u!114 &-9063263647306941038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,27 +187,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCooldown: 1
+  range: 2
   damage: 2
-  attackRange: 3
-  colliderDistance: 1
-  boxCollider2D: {fileID: 4037600117480806931}
+  colliderDistance: 0.2
+  boxCollider: {fileID: 4037600117480806931}
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
---- !u!114 &-8337749920092429706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686657231170724179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d66318fe58b401b4fb4c477a33a8beb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftEdge: {fileID: 0}
-  rightEdge: {fileID: 0}
 --- !u!1 &1731470684279037497
 GameObject:
   m_ObjectHideFlags: 0
