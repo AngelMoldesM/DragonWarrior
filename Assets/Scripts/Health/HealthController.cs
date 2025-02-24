@@ -8,6 +8,9 @@ public class HealthController : MonoBehaviour
     private bool dead;
 
     private Animator anim;
+
+     [Header("Components")]
+    [SerializeField] private Behaviour[] components;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
@@ -39,7 +42,11 @@ public class HealthController : MonoBehaviour
             if (!dead)
             {
             anim.SetTrigger("die");
-            GetComponent<PlayerController>().enabled = false;
+           
+           //disable all components
+            foreach (Behaviour component in components)
+            component.enabled = false;
+
             dead = true;
             }
 

@@ -6,7 +6,9 @@ public class DoorController : MonoBehaviour
     [SerializeField] private Transform nextRoom;
     [SerializeField] private CameraController cam;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+}
+ /**   private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
@@ -15,5 +17,4 @@ public class DoorController : MonoBehaviour
             else
                 cam.MoveToNewRoom(previousRoom);
         }
-    }
-}
+    }*/
