@@ -8,16 +8,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     private Rigidbody2D body;
     private Animator anim;
-    private BoxCollider2D boxCollider;
+    //private BoxCollider2D boxCollider;
+
+    private CapsuleCollider2D capsuleCollider;
     private float wallJumpCooldown;
     private float horizontalInput;
+
+    [SerializeField] private int coinCount = 0;
+
+    private AudioManager audioManager;
 
     private void Awake()
     {
         //Grab references for rigidbody and animator from object
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
     private void Update()
@@ -60,6 +67,7 @@ public class PlayerController : MonoBehaviour
         {
             body.linearVelocity  = new Vector2(body.linearVelocity .x, jumpPower);
             anim.SetTrigger("jump");
+            audioManager.PlayJumpSound();
         }
         else if (onWall() && !isGrounded())
         {
@@ -76,18 +84,31 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private bool isGrounded()
-    {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
-        return raycastHit.collider != null;
-    }
-    private bool onWall()
-    {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
-        return raycastHit.collider != null;
-    }
+  private bool isGrounded()
+{
+    RaycastHit2D raycastHit = Physics2D.CapsuleCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, CapsuleDirection2D.Vertical, 0, Vector2.down, 0.1f, groundLayer);
+    return raycastHit.collider != null;
+}
+
+private bool onWall()
+{
+    RaycastHit2D raycastHit = Physics2D.CapsuleCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, CapsuleDirection2D.Vertical, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+    return raycastHit.collider != null;
+}
     public bool canAttack()
     {
         return horizontalInput == 0 && isGrounded() && !onWall();
+    }
+
+     // Método para obtener el recuento de monedas
+    public int GetCoinCount()
+    {
+        return coinCount;
+    }
+
+    // Método para sumar monedas (lo puedes llamar desde el script de las monedas)
+    public void AddCoin()
+    {
+        coinCount++;
     }
 }

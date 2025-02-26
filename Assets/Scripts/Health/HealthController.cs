@@ -11,17 +11,15 @@ public class HealthController : MonoBehaviour
 
      [Header("Components")]
     [SerializeField] private Behaviour[] components;
+
+    private AudioManager audioManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
-    }
-
-    void Start()
-    {
-        
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
     // Update is called once per frame
@@ -36,6 +34,7 @@ public class HealthController : MonoBehaviour
         if (currentHealth > 0)
         {
             anim.SetTrigger("hurt");
+            audioManager.PlayHurtSound();
             //iframes?
         }else
         {

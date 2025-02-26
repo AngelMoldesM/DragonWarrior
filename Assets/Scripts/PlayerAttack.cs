@@ -11,16 +11,20 @@ public class PlayerAttack : MonoBehaviour
     private PlayerController playerMovement;
     private float cooldownTimer = Mathf.Infinity;
 
+    public AudioManager audioManager;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerController>();
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) && cooldownTimer > attackCooldown && playerMovement.canAttack())
             Attack();
+
 
         cooldownTimer += Time.deltaTime;
     }
@@ -29,7 +33,7 @@ public class PlayerAttack : MonoBehaviour
     {
         anim.SetTrigger("attack");
         cooldownTimer = 0;
-
+        audioManager.PlayShootingSound();
         fireballs[FindFireball()].transform.position = firePoint.position;
         fireballs[FindFireball()].GetComponent<ProyectileController>().SetDirection(Mathf.Sign(transform.localScale.x));
     }
