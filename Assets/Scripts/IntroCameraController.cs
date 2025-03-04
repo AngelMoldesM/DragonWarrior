@@ -41,8 +41,8 @@ public class IntroCameraController : MonoBehaviour
         // Detectar cualquier tecla y cargar la siguiente escena
         if (Input.anyKeyDown)
         {
-            // Cambiar a la escena principal (por ejemplo, la escena del juego)
-            UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene"); // Asegúrate de tener la escena MainScene en el Build Settings
+            // Cambiar a la escena principal
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Scene01"); 
         }
     }
 }

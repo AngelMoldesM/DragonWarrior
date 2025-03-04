@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private float wallJumpCooldown;
     private float horizontalInput;
 
-    [SerializeField] private int coinCount = 0;
+    private bool isPaused = false;
 
     private AudioManager audioManager;
 
@@ -59,6 +59,12 @@ public class PlayerController : MonoBehaviour
         }
         else
             wallJumpCooldown += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.P)) {
+            TogglePause(); 
+        }
+         
+
     }
 
     private void Jump()
@@ -100,15 +106,19 @@ private bool onWall()
         return horizontalInput == 0 && isGrounded() && !onWall();
     }
 
-     // Método para obtener el recuento de monedas
-    public int GetCoinCount()
+private void TogglePause()
+{
+    if (isPaused)
     {
-        return coinCount;
+        Time.timeScale = 1f; 
+        isPaused = false;
+       
     }
+    else
+    {
+        Time.timeScale = 0f; 
+        isPaused = true;
 
-    // Método para sumar monedas (lo puedes llamar desde el script de las monedas)
-    public void AddCoin()
-    {
-        coinCount++;
     }
+}
 }

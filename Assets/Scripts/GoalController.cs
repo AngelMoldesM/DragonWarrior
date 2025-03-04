@@ -4,49 +4,56 @@ using UnityEngine.SceneManagement;
 
 public class GoalController : MonoBehaviour
 {
-   private AudioManager audioManager;
+    private AudioManager audioManager;
 
     [SerializeField] private TextMeshProUGUI winMessageText;
-    [SerializeField] private TextMeshProUGUI coinCountText; 
+    [SerializeField] private TextMeshProUGUI coinCountText;
     [SerializeField] private TextMeshProUGUI restartMessageText;
-    [SerializeField] private PlayerController playerController; 
-    [SerializeField] private CoinController coinController; 
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private CoinController coinController;
 
     private bool gameWon = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("Colisión con: " + other.gameObject.name); // <-- Esto imprimirá el objeto con el que colisiona
+
         if (other.CompareTag("Player") && !gameWon)
         {
-            gameWon = true; 
+            Debug.Log("Jugador alcanzó la meta");
 
- 
+            gameWon = true;
             audioManager = FindAnyObjectByType<AudioManager>();
             audioManager.PlayVictorySound();
 
-   
             winMessageText.gameObject.SetActive(true);
-            winMessageText.text = "¡Has ganado!";
-
-     
             coinCountText.gameObject.SetActive(true);
             coinCountText.text = "Monedas: " + coinController.GetCoinCount();
 
-   
-            restartMessageText.gameObject.SetActive(true);
-            restartMessageText.text = "Presiona 'R' para reiniciar o 'Esc' para salir.";
-
-    
             playerController.enabled = false;
-
- 
             DisableAllEnemies();
+
+            if (SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 1)
+            {
+                winMessageText.text = "¡Felicidades, has completado el juego!";
+                restartMessageText.gameObject.SetActive(true);
+                restartMessageText.text = "Presiona 'R' para reiniciar o 'Esc' para salir.";
+            }
+            else
+            {
+                Invoke("LoadNextScene", 2f);
+            }
         }
+    }
+
+
+    private void LoadNextScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private void DisableAllEnemies()
     {
-        // Buscar y desactivar todos los enemigos tipo MeleeEnemy
         MeleeEnemy[] enemies = FindObjectsByType<MeleeEnemy>(FindObjectsSortMode.None);
         foreach (MeleeEnemy enemy in enemies)
         {
@@ -60,11 +67,15 @@ public class GoalController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reiniciar nivel
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Application.Quit(); // Salir del juego
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false; // Detener el juego en el Editor
+#else
+        Application.Quit(); // Cerrar el juego en la Build
+#endif
             }
         }
     }
