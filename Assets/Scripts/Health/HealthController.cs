@@ -1,58 +1,67 @@
 using UnityEngine;
+using System; // Necesario para usar eventos
 
+[RequireComponent(typeof(Animator))]
 public class HealthController : MonoBehaviour
 {
-    [SerializeField]private float startingHealth ;
-    public float currentHealth{get; private set;}
+    [Header("Health Settings")]
+    [SerializeField] private float startingHealth; 
 
-    private bool dead;
+    [Header("Components")]
+    [SerializeField] private Behaviour[] components; 
+
+    public float CurrentHealth { get; private set; } 
+    public bool IsDead { get; private set; } 
+
+    public event Action OnPlayerDeath; 
 
     private Animator anim;
-
-     [Header("Components")]
-    [SerializeField] private Behaviour[] components;
-
     private AudioManager audioManager;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
-        currentHealth = startingHealth;
-        anim = GetComponent<Animator>();
-        audioManager = FindAnyObjectByType<AudioManager>();
+        CurrentHealth = startingHealth; 
+        anim = GetComponent<Animator>(); 
+        audioManager = FindAnyObjectByType<AudioManager>(); 
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage(float damage)
     {
- 
-    }
-    public void TakeDamage(float _damage)
-    {
-        currentHealth =Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
+        if (IsDead) return; // Si ya está muerto, no hacer nada
 
-        if (currentHealth > 0)
+        CurrentHealth = Mathf.Clamp(CurrentHealth - damage, 0, startingHealth); 
+
+        if (CurrentHealth > 0)
         {
+            
             anim.SetTrigger("hurt");
-            audioManager.PlayHurtSound();
-            //iframes?
-        }else
+            audioManager?.PlayHurtSound(); 
+        }
+        else
         {
-            if (!dead)
-            {
-            anim.SetTrigger("die");
-           
-           //disable all components
-            foreach (Behaviour component in components)
-            component.enabled = false;
-
-            dead = true;
-            }
-
+            Die(); 
         }
     }
-    public void AddHealth(float _health)
+
+    private void Die()
     {
-        currentHealth = Mathf.Clamp(currentHealth + _health, 0, startingHealth);
+        if (IsDead) return; 
+
+        IsDead = true;
+        anim.SetTrigger("die"); 
+
+        // Desactiva los scripts CUIDAO MATAO!
+        foreach (Behaviour component in components)
+        {
+            component.enabled = false;
+        }
+
+       
+        OnPlayerDeath?.Invoke();
+    }
+
+    public void AddHealth(float health)
+    {
+        CurrentHealth = Mathf.Clamp(CurrentHealth + health, 0, startingHealth);
     }
 }

@@ -1,22 +1,24 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private HealthController healthController;
-    [SerializeField] private Image totalHealthBar;
+    [Header("Health Bar Settings")]
+    [SerializeField] private HealthController healthController; 
+    [SerializeField] private Image totalHealthBar; 
+    [SerializeField] private Image currentHealthBar; 
 
-    [SerializeField] private Image currenthealthBar;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private const int MAX_HEARTS = 10; 
+
+    private void Start()
     {
-        totalHealthBar.fillAmount = healthController.currentHealth / 10;
+        totalHealthBar.fillAmount = healthController.CurrentHealth / MAX_HEARTS;
+
+        currentHealthBar.fillAmount = healthController.CurrentHealth / MAX_HEARTS;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        currenthealthBar.fillAmount = healthController.currentHealth / 10;
+        currentHealthBar.fillAmount = healthController.CurrentHealth / MAX_HEARTS;
     }
 }

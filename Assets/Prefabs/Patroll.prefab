@@ -42,7 +42,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 321207993362798543}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d66318fe58b401b4fb4c477a33a8beb0, type: 3}
   m_Name: 
@@ -143,6 +143,10 @@ PrefabInstance:
       propertyPath: rightEdge
       value: 
       objectReference: {fileID: 7742714196146000151}
+    - target: {fileID: 336370631759530832, guid: ab1f3b993f3abe44aa03ace75552ede1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 686657231170724179, guid: ab1f3b993f3abe44aa03ace75552ede1, type: 3}
       propertyPath: m_Name
       value: MeleeBandit

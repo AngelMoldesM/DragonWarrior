@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        //Grab references for rigidbody and animator from object
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
@@ -31,17 +30,17 @@ public class PlayerController : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
 
-        //Flip player when moving left-right
+        //Girar al personaje en función de la dirección
         if (horizontalInput > 0.01f)
             transform.localScale = Vector3.one;
         else if (horizontalInput < -0.01f)
             transform.localScale = new Vector3(-1, 1, 1);
 
-        //Set animator parameters
+        //Activar animaciones
         anim.SetBool("run", horizontalInput != 0);
         anim.SetBool("grounded", isGrounded());
 
-        //Wall jump logic
+        //Salto de muro, REVISAR!!
         if (wallJumpCooldown > 0.2f)
         {
             body.linearVelocity  = new Vector2(horizontalInput * speed, body.linearVelocity .y);
@@ -77,12 +76,15 @@ public class PlayerController : MonoBehaviour
         }
         else if (onWall() && !isGrounded())
         {
+            
             if (horizontalInput == 0)
             {
+                //Si el jugador está tocando una pared y no se mueve, salta hacia la dirección opuesta a la pared(v 1.0)
                 body.linearVelocity  = new Vector2(-Mathf.Sign(transform.localScale.x) * 10, 0);
                 transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
             else
+                //Si el jugador está tocando una pared y se mueve, salta hacia la dirección opuesta a la pared(Regulero)            
                 body.linearVelocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
 
             wallJumpCooldown = 0;
@@ -92,12 +94,14 @@ public class PlayerController : MonoBehaviour
 
   private bool isGrounded()
 {
+    //Comprueba si el jugador está tocando el suelo
     RaycastHit2D raycastHit = Physics2D.CapsuleCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, CapsuleDirection2D.Vertical, 0, Vector2.down, 0.1f, groundLayer);
     return raycastHit.collider != null;
 }
 
 private bool onWall()
 {
+    //Comprueba si el jugador está tocando una pared
     RaycastHit2D raycastHit = Physics2D.CapsuleCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, CapsuleDirection2D.Vertical, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
     return raycastHit.collider != null;
 }

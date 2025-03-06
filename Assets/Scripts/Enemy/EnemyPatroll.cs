@@ -32,6 +32,7 @@ public class EnemyPatroll : MonoBehaviour
 
     private void Update()
     {
+        //Si se mueve a la izquierda
         if (movingLeft)
         {
             if (enemy.position.x >= leftEdge.position.x)
@@ -39,6 +40,7 @@ public class EnemyPatroll : MonoBehaviour
             else
                 DirectionChange();
         }
+        //Si se mueve a la derecha
         else
         {
             if (enemy.position.x <= rightEdge.position.x)
@@ -48,11 +50,13 @@ public class EnemyPatroll : MonoBehaviour
         }
     }
 
+    //Cambiar direccion
     private void DirectionChange()
     {
         anim.SetBool("moving", false);
         idleTimer += Time.deltaTime;
 
+        //Si el tiempo de idle es mayor al tiempo de duracion
         if(idleTimer > idleDuration)
             movingLeft = !movingLeft;
     }
@@ -62,11 +66,11 @@ public class EnemyPatroll : MonoBehaviour
         idleTimer = 0;
         anim.SetBool("moving", true);
 
-        //Make enemy face direction
+        //Cambiar direccion de movimiento
         enemy.localScale = new Vector3(Mathf.Abs(initScale.x) * _direction,
             initScale.y, initScale.z);
 
-        //Move in that direction
+        //Moverse en direccion a donde mira
         enemy.position = new Vector3(enemy.position.x + Time.deltaTime * _direction * speed,
             enemy.position.y, enemy.position.z);
     }

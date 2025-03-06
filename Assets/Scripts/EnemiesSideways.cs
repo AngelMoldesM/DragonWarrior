@@ -21,6 +21,7 @@ public class EnemiesSideways : MonoBehaviour
     {
         if (movingLeft)
         {
+            // Se mueve a la izquierda
             transform.position += Vector3.left * speed * Time.deltaTime;
             if (transform.position.x <= leftEdge)
             {
@@ -29,6 +30,7 @@ public class EnemiesSideways : MonoBehaviour
         }
         else
         {
+            // Se mueve a la derecha
             transform.position += Vector3.right * speed * Time.deltaTime;
             if (transform.position.x >= rightEdge)
             {

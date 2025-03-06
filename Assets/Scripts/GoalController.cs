@@ -16,7 +16,7 @@ public class GoalController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Colisión con: " + other.gameObject.name); // <-- Esto imprimirá el objeto con el que colisiona
+        Debug.Log("Colisión con: " + other.gameObject.name);
 
         if (other.CompareTag("Player") && !gameWon)
         {
