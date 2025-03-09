@@ -20,8 +20,6 @@
 # Ignorar archivos de Asset Store
 [Aa]ssets/AssetStoreTools*
 
-# Ignorar archivos de TextMesh Pro
-[Aa]ssets/TextMesh* Pro
 
 # Ignorar archivos de VS/MD
 .vs/

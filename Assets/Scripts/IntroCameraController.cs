@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class IntroCameraController : MonoBehaviour
 {   
-    [SerializeField] private Transform startPoint;  // El punto de inicio de la cámara
-    [SerializeField] private Transform endPoint;    // El punto final donde la cámara llegará
-    [SerializeField] private float cameraSpeed; // Velocidad de la cámara
+    [SerializeField] private Transform startPoint;
+    [SerializeField] private Transform endPoint; 
+    [SerializeField] private float cameraSpeed;
 
-    [SerializeField] private Camera mainCamera; // La cámara que debe seguir al IntroCamera
+    [SerializeField] private Camera mainCamera; 
 
     private bool isMoving = true;
 
@@ -38,10 +38,9 @@ public class IntroCameraController : MonoBehaviour
             mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y, mainCamera.transform.position.z);
         }
 
-        // Detectar cualquier tecla y cargar la siguiente escena
+
         if (Input.anyKeyDown)
         {
-            // Cambiar a la escena principal
             UnityEngine.SceneManagement.SceneManager.LoadScene("Scene01"); 
         }
     }
